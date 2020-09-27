@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/cache
+       http://www.springframework.org/schema/cache/spring-cache.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--spring提供了import标签，可以导入其他xml文件。SSM时用得到。-->
+    <import resource="spring-mybatis.xml"/>
+    <bean id="userMapper" class="com.spring1024.mapper.userMapperImpl">
+        <property name="sqlSession" ref="sqlSession"/>
+    </bean>
+    <bean id="myAspect" class="com.spring1024.aspect.myAspect"></bean>
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"></property>
+    </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"></property>
+        <property name="transactionAware" value="true"></property>
+    </bean>
+
+    <cache:annotation-driven cache-manager="cacheManager" />
+    <context:component-scan base-package="com.spring1024.mapper"></context:component-scan>
+
+    <aop:config>
+        <aop:pointcut id="pointcut" expression="execution(* com.spring1024.mapper.userMapperImpl.*(..))"/>
+        <aop:aspect ref="myAspect">
+            <aop:before method="before" pointcut-ref="pointcut"/>
+            <aop:after-returning method="after" pointcut-ref="pointcut"/>
+        </aop:aspect>
+    </aop:config>
+    <aop:aspectj-autoproxy  proxy-target-class="true"/>
+</beans>
