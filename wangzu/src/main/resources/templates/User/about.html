@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>关于</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+    <link rel="stylesheet" th:href="@{/User/css/bootstrap.css}"> <!-- Bootstrap-Core-CSS -->
+    <link th:href="@{/User/css/style.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/User/css/bar.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/User/css/owl.carousel.css}" rel="stylesheet"><!-- Owl-carousel-CSS -->
+    <link th:href="@{/User/css/fontawesome-all.css}" rel="stylesheet">
+    <link th:href="@{/User/css/filter_style.css}" rel="stylesheet">
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<header>
+    <div>
+        <div th:include="/User/TTop::myheader"></div>
+        <div style="background: url('/User/images/ban11.jpg') no-repeat 0px 0px; min-height:200px;-webkit-background-size: cover;"/>
+    </div>
+        <div>
+        <nav>
+            <ul class="container ul-reset">
+                <li style="padding-right: 4px;"><a th:href="@{/user/index}">首页</a></li>
+                <span style="color:white">|</span>
+                <li><a th:href="@{/user/about}">关于</a></li>
+            </ul><!-- .container .ul-reset -->
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="w3-head-all text-center mb-5"><h3>关于我们</h3>
+    </div>
+    <div class="row">
+        <div>
+            <p style="color:black;">信息和联系方式，邮箱等。<br><br><br><br><br><br><br><br></p>
+        </div>
+    </div>
+</div>
+
+<div th:replace="/User/bottom::myfooter"/>
+
+</body>
+</html>

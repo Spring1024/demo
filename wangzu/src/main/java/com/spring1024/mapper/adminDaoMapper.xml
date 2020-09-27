@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring1024.dao.adminDao">
+	<select id="logincheck" resultType="com.spring1024.bean.admin" parameterType="com.spring1024.bean.admin">
+		SELECT * FROM t_admin WHERE aname=#{aname} and apwd=#{apwd}
+	</select>
+
+	<select id="queryAllAdmin" resultType="com.spring1024.bean.admin">
+		SELECT * FROM t_admin
+	</select>
+
+	<select id="findAdminByName" resultType="com.spring1024.bean.admin" parameterType="string">
+		SELECT * FROM t_admin WHERE aname=#{aname}
+	</select>
+
+	<select id="findAdminRole" resultType="com.spring1024.bean.role" parameterType="integer">
+		SELECT * FROM t_role WHERE rid=#{rid}
+	</select>
+
+	<select id="findAdminMenu" resultType="com.spring1024.bean.menu" parameterType="integer">
+		SELECT * FROM t_menu JOIN (
+		SELECT * FROM t_role_menu WHERE rid=#{rid} GROUP BY rmid) temp ON t_menu.rmid = temp.rmid
+	</select>
+
+	<insert id="addAdmin" parameterType="admin">
+		INSERT INTO t_admin
+		   (aid,
+			aname,
+			apwd,
+			rid)
+		VALUES
+		   (#{aid},
+			#{aname},
+			#{apwd},
+			#{rid})
+	</insert>
+</mapper>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>服务</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+    <link th:href="@{/User/css/bootstrap.css}" rel="stylesheet"> <!-- Bootstrap-Core-CSS -->
+    <link th:href="@{/User/css/style.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/User/css/bar.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/User/css/owl.carousel.css}" rel="stylesheet"><!-- Owl-carousel-CSS -->
+    <link th:href="@{/User/css/fontawesome-all.css}" rel="stylesheet">
+    <link th:href="@{/User/css/filter_style.css}" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div th:replace="/User/TTop::myheader"/>
+    <div th:replace="/User/filter::myfilter"/>
+</header>
+<div class="banner-bottom gallery py-5">
+    <div class="properties-grid">
+        <div class="container" id="house" >
+        </div>
+    </div>
+</div>
+<div class="footer-main">
+    <div class="cpy-right">
+        <p>Copyright &copy; 2019.Company spring1024 All rights reserved.</p>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/User/js/jquery-1.8.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/User/js/user/house.js}"></script>
+<script th:inline="javascript">
+    var url = [[${url}]];
+</script>
+</html>

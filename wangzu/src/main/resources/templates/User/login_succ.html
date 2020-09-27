@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'欢迎，'+${session.user.uname}"></title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/User/css/login_succ_main.css}"/>
+    <link th:href="@{/User/css/bootstrap.css}" rel="stylesheet"> <!-- Bootstrap-Core-CSS -->
+    <link th:href="@{/User/css/style.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/User/css/owl.carousel.css}" rel="stylesheet"><!-- Owl-carousel-CSS -->
+    <link th:href="@{/User/css/fontawesome-all.css}" rel="stylesheet">
+    <style type="text/css">
+        body {
+            background-color: #212529;
+        }
+
+        body, td, th {
+            color: #FFFFFF;
+        }
+
+        .mask {
+            margin: 0;
+            padding: 0;
+            border: none;
+            width: 100%;
+            height: 100%;
+            background: #333;
+            opacity: 0.6;
+            filter: alpha(opacity=60);
+            z-index: 1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        #LoginBox {
+            position: absolute;
+            left: 460px;
+            top: 150px;
+            background: white;
+            width: 426px;
+            height: 282px;
+            border: 3px solid #444;
+            border-radius: 7px;
+            z-index: 2;
+            display: none;
+            background-color: #5e42a6;
+        }
+    </style>
+    <script>
+        var prevLink = sessionStorage.getItem('prevLink');
+        if (!prevLink.endsWith( "/User/login_succ")) {
+            var oldurl = prevLink;
+            sessionStorage.removeItem("prevLink");
+            sessionStorage.setItem("prevLink","/User/login_succ");
+            location.href=oldurl;
+        }
+    </script>
+</head>
+<body>
+<div class="header" id="top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/index}">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/about}">关于</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/services}">服务</a>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/login_succ}" th:text="${session.user.uname}"></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<!-- Sidebar -->
+<section id="sidebar">
+    <div class="inner">
+        <nav>
+            <ul>
+                <li>欢迎&emsp;&emsp;&emsp;</li>
+                <li><a href="#user" th:text="${session.user.uname}"></a></li>
+                <li><a href="#order">我的订单</a></li>
+                <li><a href="#collection">我的收藏</a></li>
+                <li><a th:href="@{/chatweb}">我的消息</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+<!-- Wrapper -->
+<div id="wrapper">
+    <!-- Intro -->
+    <section id="user" class="wrapper style1 fullscreen fade-up">
+        <div class="inner">
+            <h1>好久不见。</h1>
+            <p style="margin: 0;font-size: 0.9em;color: #FFFFFF;line-height: 3em;letter-spacing: 1px;font-weight: 400;font-family: 'Raleway', sans-serif;"
+               th:inline="text">
+                &emsp;&emsp;&emsp;&emsp;用户名：[[${session.user.uname}]]<br/>
+                &emsp;&emsp;&emsp;&emsp;邮箱：[[${session.user.email}]]<br/>
+                &emsp;&emsp;&emsp;&emsp;电话：[[${session.user.utel}]]</p>
+            <ul class="actions">
+                <li style="float:right"><a href="#" class="button scrolly" id="example" style="opacity: 0.6;">修改资料</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <div id="LoginBox" style="display: none;">
+        <form method="post" id="form_up">
+            <div style="padding-top: 1em;padding-bottom: 1em;padding-left: 0.5em;padding-right: 1.5em;">
+                修改资料
+                <div style="float:right;">
+                    <a th:href="'javascript:void(0)'" title="关闭窗口" class="close_btn" id="closeBtn"
+                       style="color: black;font-size:1.5em;">×</a>
+                </div>
+            </div>
+            <div style="padding-left: 1em;position:absolute;left: 2em;height: 180px;">
+                <table style="padding-top: 0.5em;padding-bottom: 0.5em;width: 300px;height: 150px;">
+                    <tbody style="border-top-width: 2em;">
+                    <tr style="border: 0px;background-color: #5e42a6;">
+                        <td style="padding-left: 0px;padding-right: 0px;padding-top: 0.5em;padding-bottom: 0px;">用户名：
+                        </td>
+                        <td style="padding-top: 0.5em;padding-left: 0px;padding-bottom: 0px;padding-right: 0px;"><input
+                                type="text" name="uname" th:value="${session.user.uname}" id="uname">
+                            <input type="hidden" th:value="${session.user.utel}" name="utel" id="utel">
+                            <input type="hidden" th:value="${session.user.uid}" name="uid" id="uid"></td>
+                    </tr>
+                    <tr style="border: 0px;background-color: #5e42a6;">
+                        <td style="padding-left: 0px;padding-right: 0px;padding-top: 0.5em;padding-bottom: 0px;">旧密码：
+                        </td>
+                        <td style="padding-top: 0.5em;padding-left: 0px;padding-bottom: 0px;padding-right: 0px;">
+                            <input type="password" name="oldpwd" id="oldpwd"></td>
+                    </tr>
+                    <tr style="border: 0px;background-color: #5e42a6;">
+                        <td style="padding-left: 0px;padding-right: 0px;padding-top: 0.5em;padding-bottom: 0px;">新密码：
+                        </td>
+                        <td style="padding-top: 0.5em;padding-left: 0px;padding-bottom: 0px;padding-right: 0px;"><input
+                                type="password" name="upwd" id="upwd"></td>
+                    </tr>
+                    <tr style="border: 0px;background-color: #5e42a6;">
+                        <td style="padding-left: 0px;padding-right: 0px;padding-top: 0.5em;padding-bottom: 0px;">邮&emsp;箱：</td>
+                        <td style="padding-top: 0.5em;padding-left: 0px;padding-bottom: 0px;padding-right: 0px;">
+                            <input type="text" name="email" th:value="${session.user.email}" id="email"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="bottom: 1em;right: 1em;position:absolute">
+                <input type="button" value="确定" id="sumbit_up"><br>
+            </div>
+        </form>
+    </div>
+    <section id="order" class="wrapper style2 spotlights">
+        <section>
+            <a href="#" class="image"><img th:src="@{/User/images/p1.jpg}" alt="" data-position="center center"/></a>
+            <div class="content">
+                <div class="inner">
+                    <div style="float:right"><a href="#"><img th:src="@{/User/images/detial.jpg}"></a></div>
+                    <h2>酒店名字</h2>
+                    <p>入住时间<br/>花费金额</p>
+                    <div>
+                        <div id="half-demo"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <a href="#" class="image"><img th:src="@{/User/images/p2.jpg}" alt="" data-position="top center"/></a>
+            <div class="content">
+                <div class="inner">
+                    <div style="float:right"><a href="#"><img th:src="@{/User/images/detial.jpg}"></a></div>
+                    <h2>酒店名字</h2>
+                    <p>入住时间<br/>花费金额</p>
+                    <div>
+                        <div id="half-demo1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <a href="#" class="image"><img th:src="@{/User/images/p3.jpg}" alt="" data-position="25% 25%"/></a>
+            <div class="content">
+                <div class="inner">
+                    <div style="float:right"><a href="#"><img th:src="@{/User/images/detial.jpg}"></a></div>
+                    <h2>酒店名字</h2>
+                    <p>入住时间<br/>花费金额</p>
+                    <div>
+                        <div id="half-demo2"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+    <!-- Two -->
+    <section id="collection" class="wrapper style3 fade-up">
+        <div class="inner">
+            <h2>我的收藏<br/>&emsp;</h2>
+            <div class="features" th:if="${pb.beanList.size()} eq 0">
+                <section>
+                    <p>还没有心怡的房间呢！<a th:href="@{/user/services}">快来搜寻吧！</a></p>
+                </section>
+            </div>
+            <div class="features" th:if="${pb.beanList} ne null">
+                <section th:switch="${h.htype}" th:each="h:${pb.beanList}">
+                    <div style="float:left">
+                        <a th:href="@{/houseDetail(hid=${h.hid})}"><img
+                                style="padding-top: 8px;padding-right: 32px;width: 232px;"
+                                th:src="@{'/User/'+${h.himg}}"></a>
+                    </div>
+                    <h3 th:text="${h.hname}"></h3>
+                    <p th:case="'3'" th:inline="text">
+                        [[${h.hprice}]]元/日<br>[[${h.hposition}]]<br>[[${h.hmodel}]]</p>
+                    <p th:case="'1'" th:inline="text">
+                        [[${h.hprice}]]元/月<br>[[${h.hposition}]]<br>[[${h.hmodel}]]</p>
+                    <p th:case="*" th:inline="text">
+                        [[${h.hprice/10000}]]万<br>[[${h.hposition}]]<br>[[${h.hmodel}]]</p>
+                </section>
+            </div>
+            <ul class="actions">
+                <li><a href="#" class="button">更多</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Three -->
+    <section id="message" class="wrapper style1 fade-up">
+    </section>
+    <div class="footer">
+        <p align="center">Copyright &copy; 2019.Company Spring1024 All rights reserved.</p>
+    </div>
+</div>
+<!-- Scripts -->
+<script th:src="@{/User/js/jquery-1.8.3.min.js}"></script>
+<script th:src="@{/User/js/jquery-2.2.3.min.js}"></script>
+<script th:src="@{/User/js/jquery.scrollex.min.js}"></script>
+<script th:src="@{/User/js/jquery.scrolly.min.js}"></script>
+<script th:src="@{/User/js/skel.min.js}"></script>
+<script th:src="@{/User/js/util.js}"></script>
+<script th:src="@{/User/js/jquery.raty.min.js}"></script>
+<script th:src="@{/User/js/login_succ_main.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        //弹出修改
+        $("#example").hover(function () {
+            $(this).stop().animate({
+                opacity: '1'
+            }, 600);
+        }, function () {
+            $(this).stop().animate({
+                opacity: '0.6'
+            }, 1000);
+        }).on('click', function () {
+            $("body").append("<div id='mask'></div>");
+            $("#mask").addClass("mask").fadeIn("slow");
+            $("#LoginBox").fadeIn("slow");
+        });
+        //
+        //按钮的透明度
+        $("#loginbtn").hover(function () {
+            $(this).stop().animate({
+                opacity: '1'
+            }, 600);
+        }, function () {
+            $(this).stop().animate({
+                opacity: '0.8'
+            }, 1000);
+        });
+        //关闭
+        $(".close_btn").hover(function () {
+            $(this).css({color: 'black'})
+        }, function () {
+            $(this).css({color: '#999'})
+        }).on('click', function () {
+            $("#LoginBox").fadeOut("fast");
+            $("#mask").css({display: 'none'});
+        });
+    });
+    $(function () {
+        $.fn.raty.defaults.path = '/User/images/star';
+        $('#half-demo').raty({
+            half: true
+        });
+    });
+    $(function () {
+        $.fn.raty.defaults.path = '/User/images/star';
+        $('#half-demo1').raty({
+            half: true
+        });
+    });
+    $(function () {
+        $.fn.raty.defaults.path = '/User/images/star';
+        $('#half-demo2').raty({
+            half: true
+        });
+    });
+    $(function () {
+        $.fn.serializeObject=function () {
+            var UnNeed="oldpwd";
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                    if (o[this.name]) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+            });
+            return o;
+        }
+        // // 输入框得到焦点时，清空提示信息
+        // $("#oldpwd").focus(function () {
+        //     //将顶部的提示信息清空
+        //     $("#alert_msg").html("");
+        //     $("#alert").addClass("sr-only");
+        //     // 得到获取焦点的输入框对用的提示信息的id
+        //     var id = $(this).attr('id');
+        //     var errorid = id + "_error";
+        //     // 得到提示框id
+        //     var messid = id + "_mess";
+        //     // 清空获得焦点的提示信息
+        //     $("#" + errorid).text("");
+        //     $("#" + messid).text("");
+        // })
+        // 输入框失去焦点时，进行数据的校验
+        $("#oldpwd").blur(
+            function () {
+                eval("(checkOldPwd())");
+            })
+        // 提交表单时进行校验
+        $("#sumbit_up").click(function (e) {
+            var formData = $("#form_up").serializeObject();
+            var userMes=JSON.stringify(formData);
+            if (checkOldPwd()) {
+                $.ajax({
+                    url: '/user/changeUser',// 要请求的方法
+                    data: userMes,// 给服务器的参数
+                    type: "POST",
+                    async: false,
+                    contentType:'application/json;charset=utf-8',
+                    dataType: "json",
+                    success: function (result) {
+                        if (result) {
+                            alert("修改成功");
+                            $("#LoginBox").close();
+                            return true;
+                        } else if (result) {
+                            alert("修改错误");
+                            return false;
+                        }
+                    }
+                })
+            }
+        });
+    });
+
+    // 校验旧密码
+    function checkOldPwd() {
+        var value = $("#oldpwd").val();
+        // $("#" + messId).css("color", "red");
+
+        // 密码不能为空
+        if (!value) {
+            // 显示提示信息
+            // $("#" + messId).text("密码不能为空");
+            alert("旧密码不能为空")
+            // 改变输入框的颜色,加上图标
+            return false;
+        }
+
+        // 密码长度必须在6-20位之间
+        if (value.length < 6 || value.length > 20) {
+            // 显示提示信息
+            // $("#" + messId).text("密码长度必须在6-20位之间");
+            // 改变输入框的颜色,加上图标
+            alert("旧密码长度应在6-20位之间")
+            return false;
+        }
+        $.ajax({
+            url: '/user/checkOldPwd',// 要请求的方法
+            data: {"oldpwd": value.toString()},// 给服务器的参数
+            type: "get",
+            async: false,
+            dataType: "text",
+            success: function (result) {
+                if (result == 'true') {
+                    flag = true;
+                    return true;
+                } else if (result == 'false') {
+                    alert("旧密码错误！");
+                    return false;
+                }
+            }
+        })
+        return true;
+    };
+
+</script>
+</body>
+</html>

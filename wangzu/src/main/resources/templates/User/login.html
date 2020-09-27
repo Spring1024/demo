@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>登录</title>
+    <link rel="stylesheet" th:href="@{/User/css/auth.css}">
+    <style type="text/css">
+        body {
+            background-image: url(/User/images/regist_BGI.jpg);
+        }
+    </style>
+
+</head>
+<body>
+<div class="lowin">
+    <div class="lowin-brand">
+        <a th:href="@{/user/index}" style="border-bottom:none;"><img th:src="@{/User/images/login_logo.png}" alt="logo"
+                                                                     title="主页"></a>
+    </div>
+    <div class="lowin-wrapper">
+        <div class="lowin-box lowin-login">
+            <div class="lowin-box-inner">
+                <form th:action="@{/user/forLogin}" method="post" id="form">
+                    <p>登录网租账户</p>
+                    <div class="lowin-group">
+                        <label>用户名</label>
+                        <input type="text" autocomplete="用户名" name="uname" class="lowin-input" id="uname">
+                    </div>
+                    <div class="lowin-group password-group">
+                        <label>密码<a href="" class="forgot-link">忘记密码？</a></label>
+                        <input type="password" name="upwd" autocomplete="密码" class="lowin-input" id="upwd">
+                    </div>
+                    <div>
+                        <div class="lowin-group">
+                            <label>验证码<a class="forgot-link" th:onclick="|javascript:changeV()|" style="cursor:pointer">换一张</a></label>
+                            <input type="text" autocomplete="验证码" name="vcode" class="lowin-input"
+                                   maxlength="4" id="Vcode"
+                                   style="padding-right: 20px;width: 220px;padding-left: 20px;height: 46px;">
+                            <div style="float:right;">
+                                <img id="img_vCode" th:onclick="|javascript:changeV()|"
+                                     style="height: 46px; width: 80px"
+                                     th:src="@{/getVerifyCode}" alt="看不清,点我更换验证码">
+                            </div>
+                        </div>
+                    </div>
+                    <input class="lowin-btn login-btn" type="submit" id="submitBtn">
+                    <div class="text-foot">
+                        没有账号？现在<a th:href="@{/user/regist}">注册</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Copyright &copy; 2019.Company Spring1024 All rights reserved.</p>
+    </div>
+</div>
+<script th:src="@{/User/js/jquery-3.3.1.min.js}"></script>
+<script>
+    var prevLink = document.referrer;
+    if ($.trim(prevLink) == '') {
+        prevLink = '/User/login_succ';
+    } else {
+        if (prevLink.indexOf('http://localhost:8080/houseDetail') != -1) {
+            prevLink = document.referrer;
+
+        }
+        else if (prevLink.indexOf('http://localhost:8080/housesPage') != -1) {      //来自注册页面
+            prevLink = document.referrer;
+
+        }else {
+            prevLink='/User/login_succ';
+
+        }
+    }
+    sessionStorage.setItem('prevLink', prevLink);
+    $(function () {
+        // 输入框得到焦点时，清空提示信息
+        $("input.lowin-input").focus(function () {
+            //将顶部的提示信息清空
+            $("#alert_msg").html("");
+            $("#alert").addClass("sr-only");
+            // 得到获取焦点的输入框对用的提示信息的id
+            var id = $(this).attr('id');
+            var errorid = id + "_error";
+            // 得到提示框id
+            var messid = id + "_mess";
+            // 清空获得焦点的提示信息
+            $("#" + errorid).text("");
+            $("#" + messid).text("");
+        })
+        // 输入框失去焦点时，进行数据的校验
+        $("input.lowin-input").blur(
+            function () {
+                // 得到获取焦点的输入框id
+                var inpuutblur = $(this).attr('id');
+                // 执行数据校验函数
+                var checkfunname = "check"
+                    + inpuutblur.substring(0, 1).toUpperCase()
+                    + inpuutblur.substring(1) + "()";
+                eval("(" + checkfunname + ")");
+            })
+        // 提交表单时进行校验
+        $("form").submit(function (e) {
+
+            var bool = false;
+
+            if (checkUname()) {
+                if (checkUpwd()) {
+                    if (checkVcode()) {
+                        bool = true;
+                    }
+                }
+            }
+
+            return bool;
+        });
+
+    });
+
+    //校验验证码
+    function checkVcode() {
+        var flag = false;
+        var value = $("input#Vcode").val();
+        // $("#" + messId).css("color", "red");
+        if (!value) {
+            // 显示提示信息
+            // $("#" + messId).text("验证码不能为空");
+            // 改变输入框的颜色,加上图标
+            alert("验证码不能为空");
+            return false;
+        }
+        //校验验证码是否输入正确
+        $.ajax({
+            url: '/user/checkVcode',// 要请求的方法
+            data: {"vcode": value.toString()},// 给服务器的参数
+            type: "get",
+            async: false,
+            dataType: "text",
+            success: function (result) {
+                if (result == 'true') {
+                    flag = true;
+                    return true;
+                } else if (result == 'false') {
+                    alert("验证码错误！");
+                    return false;
+                }
+            }
+        })
+        return flag;
+    }
+
+    // 校验密码
+    function checkUpwd() {
+        var id = "upwd";
+        var value = $("#" + id).val();
+        // $("#" + messId).css("color", "red");
+
+        // 密码不能为空
+        if (!value) {
+            // 显示提示信息
+            // $("#" + messId).text("密码不能为空");
+            alert("密码不能为空")
+            // 改变输入框的颜色,加上图标
+            return false;
+        }
+
+        // 密码长度必须在6-20位之间
+        if (value.length < 3 || value.length > 20) {
+            // 显示提示信息
+            // $("#" + messId).text("密码长度必须在6-20位之间");
+            // 改变输入框的颜色,加上图标
+            alert("密码长度必须在6-20位之间")
+            return false;
+        }
+        return true;
+    };
+
+    function checkUname() {
+        var id = "uname";
+        var value = $("#" + id).val();
+        if (!value) {
+            // 显示提示信息
+            // $("#" + messId).text("密码不能为空");
+            alert("用户名不能为空");
+            // 改变输入框的颜色,加上图标
+            return false;
+        }
+
+        return true;
+    }
+
+    // // 校验手机号码
+    // function checkUtele() {
+    //     var id = "utele";
+    //     var value = $("#" + id).val();
+    //     var messId = id + "_mess";
+    //     $("#" + messId).css("color", "red");
+    //
+    //     // 电话号码不能为空
+    //     if (!value) {
+    //         // 显示提示信息
+    //         $("#" + messId).text("电话号码不能为空");
+    //         // 改变输入框的颜色,加上图标
+    //         changeColor("blur", id, "false");
+    //
+    //         return false;
+    //     }
+    //
+    //     // 电话号码的长度必须是11个字符
+    //     if (value.length != 11) {
+    //         // 显示提示信息
+    //         $("#" + messId).text("用电话号码的长度必须是11位");
+    //         // 改变输入框的颜色,加上图标
+    //         changeColor("blur", id, "false");
+    //
+    //         return false;
+    //     }
+    //
+    //     // 电话号码必须全都数字
+    //     if (!(/^[0-9]*[1-9][0-9]*$/.test(value))) {
+    //         // 显示提示信息
+    //         $("#" + messId).text("电话号码必须全都数字");
+    //         // 改变输入框的颜色,加上图标
+    //         changeColor("blur", id, "false");
+    //
+    //         return false;
+    //     }
+    //
+    //     // 校验电话号码是已经被注册
+    //     $.ajax({
+    //         url: "/checkTelephoneIsExist.action",// 要请求的方法
+    //         data: {
+    //             utele: value
+    //         },// 给服务器的参数
+    //         type: "POST",
+    //         dataType: "json",
+    //         async: false,// 是否异步请求，如果是异步，那么不会等服务器返回，我们这个函数就向下运行了。
+    //         cache: false,
+    //         success: function (result) {
+    //             if (result.bool == "true") {
+    //                 // 电话号码被注册
+    //                 changeColor("blur", id, result.bool);
+    //             } else {
+    //                 // 电话号码未被注册
+    //                 $("#" + messId).text(result.mess);
+    //                 changeColor("blur", id, result.bool);
+    //             }
+    //         }
+    //     })
+    //     return true;
+    // };
+</script>
+<script>
+    function changeV() {
+        var src = "/getVerifyCode?time=" + new Date().getTime();
+        $("#img_vCode").attr("src", src);
+    }</script>
+<!--<script>-->
+<!--    var msg = "sda";-->
+<!--    if (msg !== '') {-->
+<!--        $("#alert").removeClass("sr-only");-->
+<!--    } else {-->
+<!--        $("#alert").addClass("sr-only");-->
+<!--    }-->
+<!--</script>-->
+</body>
+</html>

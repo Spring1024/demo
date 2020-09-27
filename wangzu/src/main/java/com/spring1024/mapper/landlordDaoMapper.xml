@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spring1024.dao.landlordDao">
+	<select id="queryLandlordTotal" resultType="integer">
+		select count(*) from t_landlord l
+		<where>
+			<if test="lname != null and lname != '' ">
+				and l.lname = #{lname}
+			</if>
+			<if test="ltele != null and ltele != '' ">
+				and l.ltel = #{ltel}
+			</if>
+		</where>
+	</select>
+	<select id="queryLandlord" resultType="Landlord">
+		select * from t_landlord
+	</select>
+	<select id="queryByLid" parameterType="string" resultType="landlord">
+		select * from t_landlord where lid = #{hbelong}
+	</select>
+	<select id="logincheck" resultType="landlord" parameterType="landlord">
+		SELECT * FROM t_landlord WHERE ltel=#{ltel} and lpwd=#{lpwd}
+	</select>
+	<select id="queryHousesByLid" resultType="house">
+		select * from t_house where hbelong=#{lid}
+		limit  #{pageNum,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+	</select>
+	<!-- 查询条件下的总数量 -->
+	<select id="getCountByLid" parameterType="landlord"
+		resultType="integer">
+		select count(*) from t_house where hbelong=#{lid}
+		ORDER BY t_house.hprice 
+	</select>
+	<select id="getCountByDate" parameterType="string"
+			resultType="integer">
+		select count(*) from t_landlord where ldate=#{ldate}
+	</select>
+	<update id="deleteLandlordHouseID" parameterType="string">
+		update t_landlord set hid='' where hid=#{hid}
+	</update>
+	<select id="findLandlordByName" parameterType="string" resultType="landlord">
+		select * from t_landlord where lname=#{lname};
+	</select>
+
+	<select id="findLandlordRole" resultType="com.spring1024.bean.role" parameterType="integer">
+		SELECT * FROM t_role WHERE rid=#{rid}
+	</select>
+
+	<select id="findLandlordMenu" resultType="com.spring1024.bean.menu" parameterType="integer">
+		SELECT * FROM t_menu JOIN (
+		SELECT * FROM t_role_menu WHERE rid=#{rid} GROUP BY rmid) temp ON t_menu.rmid = temp.rmid
+	</select>
+
+	<delete id="deleteLandlordHByLid" parameterType="string">
+		delete from t_landlord where lid=#{lid}
+	</delete>
+
+	<insert id="addLandlord" parameterType="landlord">
+		INSERT INTO t_landlord
+		   (lid,
+			lname,
+			lpwd,
+			ltel,
+			idCard,
+			ldate,
+			rid)
+		VALUES
+		   (#{lid},
+			#{lname},
+			#{lpwd},
+			#{ltel},
+			#{idCard},
+			#{ldate},
+			#{rid})
+	</insert>
+</mapper>

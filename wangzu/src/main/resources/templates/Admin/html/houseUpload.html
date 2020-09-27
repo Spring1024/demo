@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WangZUpload</title>
+    <link rel="stylesheet" th:href="@{/static_Admin/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/static_Admin/css/style.css}">
+    <style>
+        .layui-upload-img {
+            width: 92px;
+            height: 92px;
+            margin: 0 10px 10px 0;
+        }
+    </style>
+    <script>
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
+        };
+        var myDate=new Date();
+        if (myDate.getMonth()>10){
+            window.nowDate=myDate.getFullYear()+'-'+(myDate.getMonth()+1);
+        }else {
+            window.nowDate=myDate.getFullYear()+'-0'+(myDate.getMonth()+1);
+        }
+        window.hid = guid();
+    </script>
+</head>
+<body onload="(function() {document.getElementById('hid').value=hid;document.getElementById('hdate').value=nowDate})()">
+<blockquote class="layui-elem-quote">房屋信息填报</blockquote>
+<form class="layui-form" action="/admin/addHouse" style="padding: 20px;">
+    <input type="hidden" id="hid" name="hid">
+    <input type="hidden" id="hdate" name="hdate">
+    <div class="layui-form-item">
+        <label class="layui-form-label">房屋标题</label>
+        <div class="layui-input-inline">
+            <input type="text" name="hname" placeholder="请输入房屋标题" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">出租类型</label>
+        <div class="layui-input-inline layui-form">
+            <input type="radio" name="htype" value="2" title="出售" lay-filter="hType">
+            <input type="radio" name="htype" value="1" title="长租" lay-filter="hType" checked>
+            <input type="radio" name="htype" value="3" title="短租" lay-filter="hType">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择城市</label>
+        <div class="layui-input-inline">
+            <select name="hposition">
+                <option value="南昌">南昌</option>
+                <option value="上饶">上饶</option>
+                <option value="鹰潭">鹰潭</option>
+                <option value="萍乡">萍乡</option>
+                <option value="九江">九江</option>
+                <option value="景德镇">景德镇</option>
+                <option value="宜春">宜春</option>
+                <option value="新余">新余</option>
+                <option value="吉安">吉安</option>
+                <option value="抚州">抚州</option>
+                <option value="赣州">赣州</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">请填写详细地址</label>
+        <div class="layui-input-block">
+            <textarea name="haddress" placeholder="请填写详细地址" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">请填写描述</label>
+        <div class="layui-input-block">
+            <textarea name="hdesc" placeholder="请填写描述" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">请填写房屋类型</label>
+        <div class="layui-input-block">
+            <input name="hmodel" placeholder="请填写居室数" class="layui-textarea" type="number">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">面积</label>
+        <div class="layui-input-inline">
+            <input type="number" name="harea" placeholder="请输入面积" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">费用</label>
+        <div class="layui-input-inline" style="width: 240px">
+            <input type="number" style="width: 80%;float: left" name="hprice" placeholder="请输入费用" autocomplete="off"
+                   class="layui-input">
+            <label id="Day" style="display:none;">元/日</label>
+            <label id="Month"
+                   style="display:block;float:right;padding:9px 0px;font-weight:400;line-height:20px;text-align:right;">元/月</label>
+            <label id="Long" style="display:none;">万</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系方式</label>
+        <div class="layui-input-inline">
+            <input type="number" name="htele" placeholder="请输入联系方式" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-upload">
+        <input type="hidden" id="mainImg" name="himg">
+        <button type="button" class="layui-btn" id="test1">上传图片</button>
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" id="demo1">
+        </div>
+        <button type="button" class="layui-btn" id="test1_submit">开始上传</button>
+    </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>上传多张图片</legend>
+    </fieldset>
+    <div class="layui-upload">
+        <button type="button" class="layui-btn" id="test2">多图片上传</button>
+        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+            预览图：
+            <div class="layui-upload-list" id="demo2"></div>
+        </blockquote>
+        <button type="button" class="layui-btn" id="test2_submit">开始上传</button>
+    </div>
+    <div class="layui-upload" style="padding-top: 20px;">
+        <button id="test" class="layui-btn">提交</button>
+        <button id="btn_back" type="button" class="layui-btn layui-btn-danger">取消</button>
+    </div>
+</form>
+</body>
+<script th:src="@{/static_Admin/js/jquery.min.js}"></script>
+<script th:src="@{/static_Admin/layui/layui.all.js}"></script>
+<script id="addDivHtml" type="text/html">
+    <div class="addDiv" onclick="javascript:$('#file').trigger('click')">
+        <img th:src="@{/static_Admin/image/add.png}">
+    </div>
+</script>
+<script>
+    //标价显示
+    layui.use('form', function () {
+        var form = layui.form;
+
+        form.on("radio(hType)", function (data) {
+            var htype = data.value;
+            if (htype == '1') {
+                $("#Month").attr("style", "display:block;float:right;padding:9px 0px;font-weight:400;line-height:20px;text-align:right;");
+                $("#Long").attr("style", "display:none");
+                $("#Day").attr("style", "display:none");
+            }
+            if (htype == '2') {
+                $("#Long").attr("style", "display:block;float:right;padding:9px 0px;font-weight:400;line-height:20px;text-align:right;");
+                $("#Month").attr("style", "display:none");
+                $("#Day").attr("style", "display:none");
+            } else if (htype == '3') {
+                $("#Day").attr("style", "display:block;float:right;padding:9px 0px;font-weight:400;line-height:20px;text-align:right;");
+                $("#Month").attr("style", "display:none");
+                $("#Long").attr("style", "display:none");
+            }
+        });
+    })
+</script>
+<script>
+    layui.use('upload', function () {
+        var $ = layui.jquery
+            , upload = layui.upload;
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            , url: '/mainImg_upload' //改成您自己的上传接口
+            , auto: false
+            , bindAction: '#test1_submit'
+            , choose: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                else if (res.code == 0) {
+                    $('#mainImg').attr('value', res.data.src);
+                    return layer.msg('上传成功');
+                }
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+
+        //多图片上传
+        upload.render({
+            elem: '#test2'
+            , url: '/aboutImg_upload' //改成您自己的上传接口
+            , auto: false
+            , bindAction: '#test2_submit'
+            , multiple: true
+            , choose: function (obj) {
+                this.data = {"hid": hid};
+                files = obj.pushFile();
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo2').append('<img src="' + result + '" alt="' + file.name + '" id="remove_' + index + '" class="layui-upload-img" title="双击删除该图片"">')
+                    $('#remove_' + index).bind('dblclick', function () {//双击删除指定预上传图片
+                        delete files[index];//删除指定图片
+                        $(this).remove();
+                    });
+                })
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                else if (res.code == 0) {
+                    return layer.msg('上传成功');
+                }
+            }
+        });
+    })
+</script>
+
+</html>

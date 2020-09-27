@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+    <link th:href="@{/User/css/font-awesome.min.css}" rel="stylesheet" type="text/css" media="all">
+    <link th:href="@{/User/css/regist_style.css}" rel="stylesheet" type="text/css" media="all"/>
+    <script>
+        var myDate = new Date();
+        if (myDate.getMonth() > 10) {
+            window.nowDate = myDate.getFullYear() + '-' + (myDate.getMonth() + 1);
+        } else {
+            window.nowDate = myDate.getFullYear() + '-0' + (myDate.getMonth() + 1);
+        }
+    </script>
+    <style type="text/css">
+        body {
+            background-image: url(/User/images/regist_BGI.jpg);
+        }
+    </style>
+</head>
+<body onload="(function() {document.getElementById('udate').value=nowDate})()">
+<div class="signupform" >
+    <h1>注册网租会员</h1>
+    <div class="container">
+        <div class="agile_info">
+            <div class="w3l_form">
+                <div class="left_grid_info" style="padding-bottom: 5em;">
+                    <h3>Welcome！</h3>
+                    <h4>&emsp;&emsp;不论有多少人注册，网租的用户里，永远缺您一个。</h4>
+                    <p> &emsp;&emsp;您终于发现了《网租》<br>很抱歉，让您走了许多弯路，是我们的不对。<br>但请放心，我们一定会给您最好的体验</p>
+                    <ul class="social_section_1info">
+                        <li><a href="#" class="w3_google"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="#" class="w3_vimeo"><i class="fa fa-vimeo"></i></a></li>
+                    </ul>
+                </div>
+                <div style="padding-right: 2em;">
+                    <p style="float:right"><a th:href="@{/user/index}" style="color:white">主页</a>&emsp;&emsp;<a
+                            th:href="@{/user/login}" style="color:white">返回</a></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="alert alert-warning alert-dismissible sr-only" role="alert" id="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span style="color:red" id="alert_msg">${msgErr }</span>
+                </div>
+            </div>
+            <div class="w3_info">
+                <h2>创建一个账户</h2>
+                <p>完成以下操作，成为网租会员</p>
+                <form th:action="@{/user/forRegist}" method="post" id="form">
+					<input type="text" id="udate" name="udate">
+                    <span id="uname_mess" class="help-block ziti">支持中文、字母、数字，2-20个字符</span>
+                    <div class="input-group" id="uname_form">
+                        <span><i class="fa fa-user" aria-hidden="true"></i></span>
+                        <input type="text" placeholder="用户名" name="uname" id="uname" class="form-control"
+                               aria-describedby="helpBlock1">
+                        <span class="" id="uname_span" aria-hidden="true"></span>
+                        <span id="uname_error" style="color: red"></span>
+                    </div>
+                    <span id="upwd_mess" class="help-block ziti">建议使用字母、数字和符号两种及以上的组合，6-20个字符</span>
+                    <div class="input-group" id="upwd_form">
+                        <span><i class="fa fa-lock" aria-hidden="true"></i></span>
+                        <input type="Password" placeholder="密码" name="upwd" id="upwd" class="form-control">
+                        <span class="" id="upwd_span" aria-hidden="true"></span>
+                        <span id="upwd_error" style="color: red"></span>
+                    </div>
+                    <span id="repwd_mess" class="help-block ziti">请再次输入</span>
+                    <div class="input-group" id="repwd_form">
+                        <span><i class="fa fa-lock" aria-hidden="true"></i></span>
+                        <input type="Password" placeholder="确认密码" name="repwd" id="repwd" class="form-control">
+                        <span style="top: 8px" class="" id="repwd_span" aria-hidden="true"></span>
+                        <span id="repwd_error" style="color: red"></span>
+                    </div>
+                    <span id="utel_mess" class="help-block ziti">建议使用常用的手机号</span>
+                    <div class="input-group" id="utel_form">
+                        <span><i class="fa fa-user" aria-hidden="true"></i></span>
+                        <input type="text" placeholder="电话号码" name="utel" id="utel" class="form-control">
+                        <span style="top: 8px" class="" id="utel_span" aria-hidden="true"></span>
+                        <span id="utel_error" style="color: red"></span>
+                    </div>
+                    <span id="email_mess" class="help-block ziti">请输入格式正确的邮箱</span>
+                    <div class="input-group" id="email_form">
+                        <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                        <input type="email" placeholder="邮箱" name="email" id="email" class="form-control">
+                        <span style="top: 8px" class="" id="email_span" aria-hidden="true"></span>
+                        <span id="email_error" style="color: red"></span>
+                    </div>
+                    <input type="checkbox" value="remember-me" class="form-control"/> <h4><a href="#">已阅读用户协议</a></h4>
+                    <button class="btn btn-danger btn-block" type="submit" id="submitBtn">创建账户</button>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="footer">
+
+        <p>Copyright &copy; 2019.Company Spring1024 All rights reserved.</p>
+    </div>
+</div>
+</body>
+<script th:src="@{/User/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/User/js/bootstrap.js}"></script>
+<script th:src="@{/User/js/user/regist.js}"></script>
+<script>
+    var msg = '${msgErr}';
+    if (msg != '') {
+        $("#alert").removeClass("sr-only");
+    } else {
+        $("#alert").addClass("sr-only");
+    }
+</script>
+</html>

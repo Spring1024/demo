@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta fromName="aplus-terminal" content="1">
+    <meta fromName="apple-mobile-web-app-title" content="">
+    <meta fromName="apple-mobile-web-app-capable" content="yes">
+    <meta fromName="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta fromName="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta fromName="format-detection" content="telephone=no, address=no">
+    <title>WangZu聊天</title>
+    <style type="text/css">
+        /*公共样式*/
+        body,h1,h2,h3,h4,p,ul,ol,li,form,button,input,textarea,th,td {
+            margin:0;
+            padding:0
+        }
+        body,button,input,select,textarea {
+            font:12px/1.5 Microsoft YaHei UI Light,tahoma,arial,"\5b8b\4f53";
+            *line-height:1.5;
+            -ms-overflow-style:scrollbar
+        }
+        h1,h2,h3,h4{
+            font-size:100%
+        }
+        ul,ol {
+            list-style:none
+        }
+        a {
+            text-decoration:none
+        }
+        a:hover {
+            text-decoration:underline
+        }
+        img {
+            border:0
+        }
+        button,input,select,textarea {
+            font-size:100%
+        }
+        table {
+            border-collapse:collapse;
+            border-spacing:0
+        }
+
+        /*rem*/
+        html {
+            font-size:62.5%;
+        }
+        body {
+            font:16px/1.5 "microsoft yahei", 'tahoma';
+        }
+        body .mobile-page {
+            font-size: 1.6rem;
+        }
+
+        /*浮动*/
+        .fl{
+            float: left;
+        }
+        .fr{
+            float: right;
+        }
+        .clearfix:after{
+            content: '';
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        body{
+            background-color: #F5F5F5;
+        }
+        .mobile-page{
+            max-width: 600px;
+        }
+        .mobile-page .admin-img, .mobile-page .user-img{
+            width: 45px;
+            height: 45px;
+        }
+        i.triangle-admin,i.triangle-user{
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 10px;
+            display: inline-block;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+        .mobile-page i.triangle-admin{
+            left: 4px;
+            border-right: 12px solid #fff;
+        }
+        .mobile-page i.triangle-user{
+            right: 4px;
+            border-left: 12px solid #9EEA6A;
+        }
+        .mobile-page .admin-group, .mobile-page .user-group{
+            padding: 6px;
+            display: flex;
+            display: -webkit-flex;
+        }
+        .mobile-page .admin-group{
+            justify-content: flex-start;
+            -webkit-justify-content: flex-start;
+        }
+        .mobile-page .user-group{
+            justify-content: flex-end;
+            -webkit-justify-content: flex-end;
+        }
+        .mobile-page .admin-reply, .mobile-page .user-reply{
+            display: inline-block;
+            padding: 8px;
+            border-radius: 4px;
+            background-color: #fff;
+            margin:0 15px 12px;
+        }
+        .mobile-page .admin-reply{
+            box-shadow: 0px 0px 2px #ddd;
+        }
+        .mobile-page .user-reply{
+            text-align: left;
+            background-color: #9EEA6A;
+            box-shadow: 0px 0px 2px #bbb;
+        }
+        .mobile-page .user-msg, .mobile-page .admin-msg{
+            width: 75%;
+            position: relative;
+        }
+        .mobile-page .user-msg{
+            text-align: right;
+        }
+        .chatRecord{
+            width: 100%;
+            height: 400px;
+            border-bottom: 1px solid blue;
+            line-height:20px;
+            overflow:auto;
+            overflow-x:hidden;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div style="float:right; width:100%">
+        <lable id="selectName">你是：
+            <p id="user" th:value="${session.user.uname}" th:text="${session.user.uname}" th:if="${session.user} ne null"></p>
+            <p id="landlord" th:value="${session.landlord.lname}" th:text="${session.landlord.lname}" th:if="${session.landlord} ne null"></p>
+        </lable>
+        <label id="#selectName2">发给：
+            <p id="sentTO"></p>
+        </label>
+        <div class="chatWindow">
+            <section id="chatRecord2" class="chatRecord">
+                <div id="alone_div"  class="mobile-page">
+                </div>
+            </section>
+            <section class="sendWindow">
+                <textarea fromName="sendChatValue2" id="sendChatValue2" class="sendChatValue"></textarea>
+                <input type="button" fromName="sendMessage"
+                       id="sendAloneMessage" class="sendMessage"
+                       onclick="sendAloneMessage()" value="发送">
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- 独立JS -->
+<script th:src="@{/static_Admin/js/sockjs.min.js}"></script>
+<script th:src="@{/static_Admin/js/stomp.min.js}"></script>
+<script th:src="@{/static_Admin/js/jquery.js}"></script>
+<script th:src="@{/static_Admin/js/wechat_room.js}"></script>
+<script>
+    if($("#user").val()!=null){
+        var sendtoName=$("#user").val();
+        alert(sessionStorage.getItem("userSend"));
+        if(sessionStorage.getItem("userSend")!=null){
+            sendToLandlord=sessionStorage.getItem("userSend");
+            sessionStorage.setItem("sentToName",sendtoName);
+            $("#sentTO").attr("value",sendToLandlord);
+        }
+    }
+    if($("#landlord").val()!=null){
+        var sendToUser;
+        var sendtoName=$("#landlord").val();
+        if(sessionStorage.getItem("sentToName")!=null){
+            sendToUser=sessionStorage.getItem("sentToName");
+            alert(sendToUser);
+            sessionStorage.removeItem("sentName");
+        }
+        $("#sentTO").attr("value","cherry");
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" th:href="@{/static_Admin/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/static_Admin/css/style.css}">
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url("/static_Admin/image/login_bg.png");
+            background-size: cover;
+        }
+
+        .layui-form-radio i {
+            top: 0;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            border: 1px solid #d2d2d2;
+            font-size: 12px;
+            border-radius: 2px;
+            background-color: #fff;
+            color: #fff !important;
+        }
+
+        .layui-form-radioed i {
+            position: relative;
+            width: 18px;
+            height: 18px;
+            border-style: solid;
+            background-color: #6A8BF5;
+            color: #6A8BF5 !important;
+        }
+
+        /* 使用伪类画选中的对号 */
+        .layui-form-radioed i::after, .layui-form-radioed i::before {
+            content: "";
+            position: absolute;
+            top: 8px;
+            left: 5px;
+            display: block;
+            width: 12px;
+            height: 2px;
+            border-radius: 4px;
+            background-color: #fff;
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+
+        .layui-form-radioed i::before {
+            position: absolute;
+            top: 10px;
+            left: 2px;
+            width: 7px;
+            transform: rotate(-135deg);
+        }
+    </style>
+</head>
+<body>
+<div class="login-div">
+    <h1 id="admin_h1">管理员登录</h1>
+    <h1 style="display: none" id="landlord_h1">房东登录</h1>
+    <div style="float: left;width: 100%;" class="layui-form-item">
+        <div class="layui-input-block" style="margin-left: 0px;" id="Type_login">
+            <input type="radio" name="loginType" value="admin" checked="" lay-filter="loginType">管理员
+            <input type="radio" name="loginType" value="landlord" lay-filter="loginType">房东
+        </div>
+    </div>
+    <form id="login_form" method="post" action="/admin/forLogin">
+        <div class="login-form-item">
+            <input name="aname" placeholder="用户名" id="name">
+        </div>
+        <div class="login-form-item">
+            <input name="apwd" type="password" placeholder="密码" id="pwd">
+        </div>
+
+        <button class="btn-login">登录</button>
+    </form>
+</div>
+</body>
+<script th:src="@{/static_Admin/layui/layui.all.js}"></script>
+<script th:src="@{/static_Admin/js/jquery.min.js}"></script>
+<script>
+    $("#Type_login :radio").on('click', function () {
+        //var item=$('input:radio[name="sex"]:checked').val();
+        //或者
+        var item = $(this).val();
+
+        if (item == "admin") {
+            $("#admin_h1").attr("style", "display:block");
+            $("#landlord_h1").attr("style", "display:none");
+            $("#login_form").attr("action","/admin/forLogin");
+            $("#name").attr("name","aname");
+            $("#pwd").attr("name","apwd");
+        }
+        if (item == "landlord") {
+            $("#landlord_h1").attr("style", "display:block");
+            $("#admin_h1").attr("style", "display:none");
+            $("#login_form").attr("action","/landlord/forLogin");
+            $("#name").attr("name","lname");
+            $("#pwd").attr("name","lpwd");
+        }
+    });
+
+</script>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>网租,用最舒服、最文艺的方式租房</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <link rel="stylesheet" th:href="@{/User/css/bootstrap.css}"> <!-- Bootstrap-Core-CSS -->
+    <link th:href="@{/User/css/style.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/User/css/owl.carousel.css}" rel="stylesheet"><!-- Owl-carousel-CSS -->
+    <link th:href="@{/User/css/fontawesome-all.css}" rel="stylesheet">
+    <link th:href="@{/User/css/font-css1}" rel="stylesheet">
+    <link th:href="@{/User/css/font-css}" rel="stylesheet">
+</head>
+
+<body>
+<header>
+    <div th:replace="/User/TTop::myheader"></div>
+</header>
+<!--/banner-->
+<section class="banner-top">
+    <div class="banner">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                    <div class="carousel-caption">
+                        <h4>长租房：<br/>不再起早贪黑</h4>
+                        <h3>节约你的一分一秒 </h3>
+                        <p>我们知道的，每天的首班车和末班车，那个疲惫的身影，其实是被梦想拉拽的你。</p>
+                        <a href="#" role="button" style="float:right">更多
+                            <i class="fa fa-caret-right" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="carousel-item item2">
+                    <div class="carousel-caption">
+                        <h4>短租房：<br/>不再大包小包</h4>
+                        <h3>旅游其实也可以很轻松</h3>
+                        <p>景点房？地铁房？你想要的，我们都有。</p>
+                        <a href="#" role="button">更多
+                            <i class="fa fa-caret-right" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="carousel-item item3">
+                    <div class="carousel-caption">
+                        <h4>买房：<br/>不再畏畏缩缩</h4>
+                        <h3>恋爱可以没钱，但婚姻不能没房</h3>
+                        <p>爱情不应庸俗，可婚姻却...没关系，能省去的庸俗，我们都省去了。婚姻也可以很高雅。</p>
+                        <a th:href="@{/user/services(htype=1)}" role="button">更多
+                            <i class="fa fa-caret-right" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        <!--/banner position-->
+        <div class="w3-ban-pos">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 w3-pos-left">
+                        <h1>我们能做的:</h1>
+                        <h2><br>&emsp;&emsp;不过是,提供一个远离社会尔虞我诈的地方</h2>
+                        <p><br>那里充满诗，</p>
+                        <p>那里也充满远方。</p>
+                    </div>
+                    <div class="col-lg-8 w3-pos-right">
+                        <div class="row">
+                            <div class="col-lg-6 w3-pos-inner">
+                                <i class="fas fa-home"></i>
+                                <h3><a th:href="@{/user/services}">销售服务</a></h3>
+                                <p>全国最新最全的房源，满足你的所有要求</p>
+                            </div>
+
+                            <div class="col-lg-6 w3-pos-inner">
+                                <i class="fas fa-warehouse"></i>
+                                <h3><a th:href="@{/user/services}">长租服务</a></h3>
+                                <p>听说，优质的房源和正规的合同很配哦</p>
+                            </div>
+                            <div class="col-lg-6 w3-pos-inner">
+                                <i class="fab fa-accusoft"></i>
+                                <h3><a th:href="@{/user/services}">短租服务</a></h3>
+                                <p>只是匆匆过客？放心，交给我 </p>
+
+                            </div>
+                            <div class="col-lg-6 w3-pos-inner">
+                                <i class="fab fa-monero"></i>
+                                <h3><a th:href="@{/user/about}">公司合作</a></h3>
+                                <p>承接大型企业租赁写字楼</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="news">
+    <div class="container">
+        <div class="w3-head-all text-center mb-5">
+            <h3><a th:href="@{/user/services}"
+                   th:onclick="'javascript:postAjavGetData(/queryByCondition?query'=='1&htype=短租)'">一生所选</a></h3>
+        </div>
+        <div class="news-agileinfo">
+            <div class="news-w3row" th:each="h : ${hs}">
+                <div class="wthree-news-grids row">
+                    <div class="col-lg-6 datew3-agileits">
+                        <a th:href="@{/houseDetail(hid=${h.hid})}"><img th:src="@{'/User'+${h.himg}}"
+                                                                        class="img-responsive img-fluid"/></a>
+                    </div>
+                    <div class="col-lg-6 datew3-agileits-info ">
+                        <h5><a th:href="@{/houseDetail(hid=${h.hid})}" th:text="${h.hname}"></a></h5>
+                        <h6 th:text="${h.hprice/10000}+'万'"></h6>
+                        <p th:text="${h.hdesc}"><a th:href="@{/houseDetail(hid=${h.hid})}">...</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="plans-section py-5">
+    <div class="plans-main container-fluid">
+        <div class="w3-head-all text-center mb-5">
+            <h3><a th:href="@{/user/service}">努力追逐</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<a
+                    th:href="@{/user/serice}">匆匆过客</a></h3>
+        </div>
+        <div class="plans-grids row">
+            <div class="price-grid col-md-3">
+                <div class="price-block agile">
+                    <div class="price-gd-top pric-clr1">
+                        <h4>为了孩子</h4>
+                        <h5>我们保证</h5>
+                        <h3>到达学校只需10分钟</h3>
+                        <p>为人父母，只想为孩子多做些事情</p>
+                        <p>为人孩儿，能做的不过拼命学习</p>
+                    </div>
+                    <div class="price-selet pric-sclr2">
+                        <a href="#">了解详情</a>
+                    </div>
+                </div>
+            </div>
+            <div class="price-grid col-md-3">
+                <div class="price-block price-block1 agile">
+                    <div class="price-gd-top pric-clr2">
+                        <h4>为了事业</h4>
+                        <h5>我们保证</h5>
+                        <h3>到达公司只需10分钟</h3>
+                        <p>远离故乡，我们成为你的故乡</p>
+                        <p>落叶归根，别忘了那个最初的地方</p>
+                    </div>
+                    <div class="price-selet pric-sclr2">
+                        <a href="#">了解详情</a>
+                    </div>
+                </div>
+            </div>
+            <div class="price-grid col-md-3">
+                <div class="price-block price-block1 agile">
+                    <div class="price-gd-top pric-clr2">
+                        <h4>路途</h4>
+                        <h5>舟车劳顿</h5>
+                        <h3>怎能叫这拥挤所耽搁</h3>
+                        <p>你知道吗？</p>
+                        <p>从这里到这里只需要五分钟</p>
+                    </div>
+                    <div class="price-gd-bottom">
+                        <div class="price-selet pric-sclr2">
+                            <a href="#">了解详情</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="price-grid lost col-md-3">
+                <div class="price-block price-block2 agile">
+                    <div class="price-gd-top pric-clr3">
+                        <h4>旖旎</h4>
+                        <h5>风光无限</h5>
+                        <h3>怎能不识这人间美景</h3>
+                        <p>我带你去个地方</p>
+                        <p>那里美景如画，无问春秋</p>
+
+                    </div>
+                    <div class="price-gd-bottom">
+                        <div class="price-selet pric-sclr3">
+                            <a href="#">了解详情</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="/User/bottom::myfooter"/>
+<!-- js -->
+<script type="text/javascript" th:src="@{/User/js/jquery-2.2.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/User/js/jquery-1.8.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/User/js/bootstrap.js}"></script>
+<!-- Necessary-JavaScript-File-For-Bootstrap -->
+<!-- //js -->
+<!-- requried-jsfiles-for owl -->    <!-- testimonials -->
+<script th:src="@{/User/js/owl.carousel.js}"></script>
+<script th:src="@{/User/js/user/house.js}"></script>
+<script>
+    $(document).ready(function () {
+        $("#owl-demo2").owlCarousel({
+            items: 1,
+            lazyLoad: false,
+            autoPlay: true,
+            navigation: false,
+            navigationText: false,
+            pagination: true,
+        });
+    });
+</script>
+<!-- //requried-jsfiles-for owl -->    <!-- //testimonials -->
+<!-- start-smooth-scrolling -->
+<script th:src="@{/User/js/move-top.js}"></script>
+<script th:src="@{/User/js/easing.js}"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 1000);
+        });
+    });
+</script>
+<!-- //end-smooth-scrolling -->
+
+<!-- smooth-scrolling-of-move-up -->
+<script>
+    $(document).ready(function () {
+        /*
+        var defaults = {
+            containerID: 'toTop', // fading element id
+            containerHoverID: 'toTopHover', // fading element hover id
+            scrollSpeed: 1200,
+            easingType: 'linear'
+        };
+        */
+
+        $().UItoTop({
+            easingType: 'easeOutQuart'
+        });
+
+    });
+</script>
+<!-- //smooth-scrolling-of-move-up -->
+
+
+<!-- smooth scrolling js -->
+<script th:src="@{/User/js/SmoothScroll.min.js}"></script>
+
+<!-- //smooth scrolling js -->
+</body>
+</html>

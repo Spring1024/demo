@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spring1024.dao.houseDao">
+
+<!-- 修改房源状态 -->
+<update id="updateHouseStateByHid" parameterType="string">
+	update t_lhouse
+	set
+		hstate = 1
+	where hid = #{hid}
+</update>
+<!-- 新增房源信息 -->
+<insert id="addHouse" parameterType="com.spring1024.bean.house">
+	insert into t_house
+	(
+		hid,
+		hname,
+		hprice, htype, 
+		harea, hmodel,  
+		hfloor, hposition, 
+		hsubway, hstate, 
+		htele, hdesc, 
+		himg,hbelong,hdate,haddress
+	)
+	values
+	(
+		#{hid},
+		#{hname},
+		#{hprice}, #{htype}, 
+		#{harea}, #{hmodel},  
+		#{hfloor}, #{hposition}, 
+		#{hsubway}, #{hstate}, 
+		#{htele}, #{hdesc}, 
+		#{himg},#{hbelong},#{hdate},#{haddress}
+	)
+</insert>
+	<!-- 更新房源信息 -->
+	<update id="updateHouseByHid" parameterType="com.spring1024.bean.house">
+		update t_house
+		set
+			hname = #{hname},
+			hprice = #{hprice}, htype = #{htype}, 
+			harea = #{harea}, hmodel = #{hmodel}, 
+			hbelong = #{hbelong}, 
+			hfloor = #{hfloor}, hposition = #{hposition}, 
+			hclick = #{hclick}, hstate = #{hstate}, 
+			htele = #{htele}, hdesc = #{hdesc}, 
+			himg = #{himg}
+		where hid = #{hid}
+	</update>
+	<!-- 上传房源图片 -->
+	<insert id="addImgs" parameterType="com.spring1024.bean.img">
+		insert into t_img 
+		values
+		(
+			#{iid}, #{iimg}, #{hid}
+		)
+	</insert>
+	<!-- 删除房源信息 -->
+	<delete id="delHouseByHid" parameterType="string">
+		delete from t_house where hid = #{hid};
+	</delete>
+	<!-- 删除房源的图片集 -->
+	<delete id="delAllImgsByHid" parameterType="string">
+		delete from t_img
+		where hid = #{hid}
+	</delete>
+	<!-- 查询满足条件的房源 -->
+	<select id="queryHousesByCondition" parameterType="QueryVo"
+		resultType="house">
+		select * from t_house
+		<where>
+			<if test="hid != '' and hid != null">
+				and hid = #{hid}
+			</if>
+			<if test="hname != '' and hname != null">
+				and hname = #{hname}
+			</if>
+			<if test="hsubway != '' and hsubway != null">
+				and hsubway LIKE '%${hsubway}%'
+			</if>
+			<if test="hmodel != '' and hmodel != null">
+				and hmodel LIKE '%${hmodel}%'
+			</if>
+			<if test="htype != '' and htype != null">
+				and htype = #{htype}
+			</if>
+			<if test="hposition != '' and hposition != null">
+				and hposition LIKE '%${hposition}%'
+			</if>
+			<if test="lprice != '' and lprice != null">
+				and hprice &gt;= #{lprice}
+			</if>
+			<if test="hpric != '' and hpric != null">
+				and hprice &lt; #{hpric}
+			</if>
+			<if test="method != null and method == 1">
+				and hstate = '0'
+			</if>
+		</where>
+		ORDER BY hprice asc
+		limit #{x}, #{y}
+	</select>
+	<!-- 查询条件下的总数量 -->
+	<select id="getCountByCondition" parameterType="QueryVo"
+		resultType="integer">
+		select count(*) from t_house
+		<where>
+			<if test="hid != '' and hid != null">
+				and hid = #{hid}
+			</if>
+			<if test="hname != '' and hname != null">
+				and hname = #{hname}
+			</if>
+			<if test="hmodel != '' and hmodel != null">
+				and hmodel LIKE '%${hmodel}%'
+			</if>
+			<if test="htype != '' and htype != null">
+				and htype = #{htype}
+			</if>
+			<if test="hposition != '' and hposition != null">
+				and hposition LIKE '%${hposition}%'
+			</if>
+			<if test="lprice != '' and lprice != null">
+				and hprice &gt;= #{lprice}
+			</if>
+			<if test="hpric != '' and hpric != null">
+				and hprice &lt; #{hpric}
+			</if>
+			<if test="method != null and method == 1">
+				and hstate = '0'
+			</if>
+		</where>
+		ORDER BY hprice asc
+	</select>
+	<!-- 查找指定房子的图片 -->
+	<select id="getAllImgsByHid" parameterType="string" resultType="img">
+		select * from t_img where hid = #{hid}
+	</select>
+	<!-- 查找指定的房子 -->
+	<select id="queryHouseByHid" parameterType="string" resultType="house">
+		select * from t_house where hid = #{hid}
+	</select>
+	<!-- 查询类似房源，详细页面推荐展示 -->
+	<select id="queryLikeHouses" parameterType="house" resultType="house">
+		select * from t_house
+		where hstate = 0 and htype = #{htype} and hid!=#{hid}
+		limit 0, 3
+	</select>
+	<!-- 查询房源，首页展示 -->
+	<select id="queryHouses" resultType="house">
+		select * from t_house
+		where hstate = 0 and htype = 2
+		limit 0, 3
+	</select>
+	<select id="queryAllHouses" resultType="house">
+		select * from t_house limit #{page,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 查询点击量 -->
+	<select id="queryClick" resultType="integer">
+		select SUM(hclick) from t_house 
+	</select>
+	<select id="queryClickByLid" parameterType="string" resultType="integer">
+		select SUM(hclick) from t_house WHERE hbelong=#{lid}
+	</select>
+	
+	<!-- 房屋数量 -->
+	<select id="queryCount" resultType="integer">
+		select count(*) from t_house 
+	</select>
+	<select id="queryCountByLid" parameterType="string" resultType="integer">
+		select count(*) from t_house WHERE hbelong=#{lid}
+	</select>
+
+	<select id="getCountByDate" parameterType="string"
+			resultType="integer">
+		select count(*) from t_house where hdate=#{hdate}
+	</select>
+
+	<delete id="delHouseByLid" parameterType="string">
+		delete from t_house where hbelong=#{lid}
+	</delete>
+</mapper> 

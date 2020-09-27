@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring1024.dao.userDao">
+
+    <insert id="addUser">
+		INSERT INTO t_user
+		   (uid,
+			uname,
+			upwd,
+			utel,
+			email,
+			udate)
+		VALUES
+		   (#{uid},
+			#{uname},
+			#{upwd},
+			#{utel},
+			#{email},
+			#{udate})
+	</insert>
+
+    <delete id="deleteUserByUid" parameterType="string">
+		DELETE FROM t_user WHERE uid=#{uid}
+	</delete>
+
+    <update id="updateUser">
+        UPDATE t_user
+        <set>
+            <if test="uname!=''">
+                uname=#{uname},
+            </if>
+            <if test="upwd!=''">
+                upwd=#{upwd},
+            </if>
+            <if test="email!=''">
+                email=#{email}
+            </if>
+        </set>
+        WHERE uid=#{uid};
+    </update>
+    <select id="logincheck" resultType="user" parameterType="user">
+		SELECT * FROM t_user WHERE uname=#{uname} and upwd=#{upwd}
+	</select>
+
+    <select id="findUserByName" resultType="user" parameterType="string">
+		SELECT * FROM t_user WHERE uname=#{uname}
+	</select>
+
+    <select id="checkutel" parameterType="string"
+            resultType="integer">
+		select count(*) from t_user where utel = #{utel}
+	</select>
+    <!-- 查询用户总数 -->
+    <select id="queryUsersTotal" parameterType="bQueryVo"
+            resultType="integer">
+        select count(*) from t_user u
+        <where>
+            <if test="uname != null and uname != '' ">
+                and u.uname = #{uname}
+            </if>
+            <if test="ctele != null and ctele != '' ">
+                and u.utel = #{utel}
+            </if>
+        </where>
+    </select>
+    <select id="queryUsers" resultType="user">
+        select DISTINCT u.*
+        from t_user u
+    </select>
+    <insert id="addCollect">
+		INSERT INTO t_collect
+		   (uid,
+			hid)
+		VALUES
+		   (#{uid},
+		   	#{hid})
+	</insert>
+    <select id="queryCollect" parameterType="string" resultType="house">
+		SELECT * FROM t_house JOIN (
+		SELECT * FROM t_collect WHERE uid=#{uid} GROUP BY hid) temp ON t_house.hid = temp.hid
+	</select>
+    <select id="queryCountCollect" parameterType="string" resultType="integer">
+		select count(*) from t_collect WHERE uid=#{uid} ORDER BY hid
+	</select>
+
+    <select id="isHaveHouseByUid" parameterType="collect" resultType="string">
+		select hid from t_collect where uid=#{uid} and hid=#{hid}
+	</select>
+
+    <select id="getCountByDate" parameterType="string"
+            resultType="integer">
+		select count(*) from t_user where udate=#{udate}
+	</select>
+</mapper>

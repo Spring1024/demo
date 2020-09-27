@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<link rel="stylesheet" th:href="@{/User/css/bootstrap.css}">
+<link th:href="@{/User/css/style.css}" rel='stylesheet' type='text/css'/>
+<div th:fragment="myheader">
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" th:href="@{/User/index}"><img th:src="@{/User/images/logo.png}"></a>
+            <h3 style="color:white;">&emsp;租房买房,&emsp;快上网租!</h3>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="float: right">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/index}">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/about}">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/housesPage}">服务</a>
+                    <li class="nav-item" th:if="${session.user} eq null">
+                        <a class="nav-link" th:href="@{/user/login}">登录</a>
+                    </li>
+                    <li class="nav-item" th:if="${session.user} ne null">/
+                        <a class="nav-link" th:href="@{/user/login_succ}" th:text="${session.user.uname}"></a>
+                    </li>
+                    <li class="nav-item" th:if="${session.user} ne null">
+                        <a class="nav-link" th:href="@{/user/exit}">退出</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0" >
+                    <input class="form-control mr-sm-2" type="search" placeholder="搜索" aria-label="Search"
+                           name="searchVal">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</div>
